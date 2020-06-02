@@ -1,5 +1,6 @@
 # depslib dependency file v1.0
-1591113622 source:e:\niraj\avr programs\seven_segment\main.c
+1591122586 source:e:\niraj\avr programs\seven_segment\main.c
 	<avr/io.h>
 	<util/delay.h>
+	<stdint.h>
 
