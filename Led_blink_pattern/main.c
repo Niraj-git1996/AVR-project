@@ -9,7 +9,7 @@ int main(void)
    unsigned  char z[]={0X01,0X03,0X07,0X0F,0X1F,0X3F,0X7F,0XFF,0xAA,0x55,0xF0,0x0F};
    char st=sizeof(z)/sizeof(z[0]);
    unsigned char b;
-   DDRB=0XFF;
+   DDRB |=(1<<DDB2)|(1<<DDB3);
 //     Insert code
 //  for(b=0;b<=st;b++)
 //  {
@@ -17,12 +17,13 @@ int main(void)
 //  }
     while(1)
     {
-   for(b=0;b<=st;b++)
-  {
-     // _delay_ms(200);
-      PORTB=z[b];
-      _delay_ms(500);
-  }
+       PORTB |=(1<<PORTB2);
+		PORTB &=~(1<<PORTB3);
+		_delay_ms(1000);
+
+		PORTB &=~(1<<PORTB2);
+		PORTB |=(1<<PORTB3);
+		_delay_ms(1000);
 
     }
 
