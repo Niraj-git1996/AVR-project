@@ -1,67 +1,57 @@
 /* multiplexing 3 SSD with  digit count 000-999 continuously
  */
 
+//#define F_CPU 1000000UL
 #include <avr/io.h>
-#include<util/delay.h>
-#include <stdint.h>
-#define F_CPU 1000000UL
-#define seg1  (1<<PIND0)      ///pin 0 for segment 1
- #define seg2   (1<<PIND1)    /// pin 1 for segment 2
- #define seg3    (1<<PIND2)    ///pin 3 for segment 3
+#include <util/delay.h>
+#define buzz (1<<PINC3)    /// buzzer connected when equal digit display on both segment
+#define switch_1  (1<<PINB0)   ///increment push button to increase counter
+#define  switch_2  (1<<PINB1)    ///decrement push_button to decrease counter
+#define seg1    (1<<PINC0)    /// to on the segment 1
+#define  seg2  (1<<PINC1)    ///to o the segment 2
 int main(void)
 {
-   uint8_t di[]={0X3F,0X06,0X5B,0X4F,0X66,0X6D,0X7D,0X07,0X7F,0X6F};
-   uint8_t cnt,st,i,j;
-   st=sizeof(di)/sizeof(di[0]);
-   DDRB=0XFF;
-   DDRD |=(1<<DDD0);
-   DDRD |=(1<<DDD1)|(1<<DDD2);
-
-
+	DDRB = 0x00;    ///push button connected
+	DDRC = 0xff;     ///on and off pin seven segment
+	DDRD = 0xff;     ///data pin of seven segment
+	unsigned int i,x=0,y,z;
+	unsigned char arr1[]={0X3F,0X06,0X5B,0X4F,0X66,0X6D,0X7D,0X07,0X7F,0X6F};
     while(1)
     {
-        for(cnt=0;cnt<st;cnt++)
-        {
-           _delay_ms(10);
-            for(i=0;i<st;i++)
+        if((PINB&switch_1)==0x01)
+		{
+			x++;
+			_delay_ms(100);
+		}
+		else if ((PINB&switch_2)==0x02)
+		{
+            if(x>0)
             {
-                for(j=0;j<st;j++)
-                {
-                PORTB=di[cnt];
-                PORTD=seg1;
-                _delay_ms(50);
-                PORTD=~seg1;
-                PORTB=di[i];
-                PORTD=seg2;
-                _delay_ms(50);
-                PORTD=~seg2;
-                PORTB=di[j];
-                PORTD=seg3;
-                _delay_ms(70);
-                PORTD=~seg3;
-                }
+			x--;
+			_delay_ms(100);
             }
-        }
+            else
+                x=0;
+		}
 
-//        while(!(PIND&(1<<PIND1)))
-//        {
-//            if(cnt<st)
-//            {
-//             PORTD &=(~(1<<PIND0));
-//              PORTB =di[cnt++];
-//            _delay_us(10);
-//            PORTD |=(1<<PIND0);
-//            _delay_ms(500);
-//            }
-//            else
-//            {
-//                cnt=0;
-//                break;
-//            }
-//        }
+		 {
 
-//
+		    y=x/10;
+			z=x%10;
+		    PORTC=seg1;
+			PORTD=arr1[y];
+			_delay_ms(140);
+			 PORTC=seg2;
+		     PORTD=arr1[z];
+			_delay_ms(120);
+          if(arr1[y]==arr1[z])
+          {
+              PORTC=buzz;
+              _delay_ms(80);
+          }
+
+		 }
+
     }
-
-    return 0;
 }
+
