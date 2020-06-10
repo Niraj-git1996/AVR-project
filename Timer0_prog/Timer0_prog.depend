@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1591718491 source:e:\niraj\avr programs\timer0_prog\main.c
+	<avr/io.h>
+	<stdint.h>
+	<avr/interrupt.h>
+
