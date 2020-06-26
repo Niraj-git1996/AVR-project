@@ -1,6 +1,7 @@
-  ****the USART program are done in Arduino IDE and written in embedded C language and tested 
+  ***the USART program are done in Arduino IDE and written in embedded C language and tested 
      using picsimlab and using virtual COM port to upload code and communicate with picsimlab arduino***
- Hardware wise serial is simple.  Most the time you will be using 2 pins and a ground, 
+ 
+Hardware wise serial is simple.  Most the time you will be using 2 pins and a ground, 
 the RXD (Receive Data) and TXD (Transmit Data).  The device that you are trying to talk to will also have a TX and a RX pin,
  in order to get the two devices talking you have to hook up the TX of each device to the RX pin of the other. 
 
@@ -11,15 +12,15 @@ So we have 3 Control and Status Registers (A, B & C).  Register A mainly contain
 
 UCSR0A	RXCn 	TXCn 	UDREn 	FEn 	DORn 	PEn 	U2Xn 	MPCMn 	    ATmega168/328
  
-USART Control and Status Register A
+*USART Control and Status Register A*
 
 UCSR0B	RXCIE0	TXCIE0	UDRIE0 	RXEN0	TXEN0	UCSZ02 	RXB80	TXB80	ATmega168/328 
 
-USART Control and Status Register B
+*USART Control and Status Register B*
 
 UCSR0C	UMSELn1	UMSELn0	UPMn1	UPMn0	USBSn	UCSZn1	UCSZn0	UCPOLn	ATmega168/328 
 
-USART Control and Status Register C 
+*USART Control and Status Register C* 
 
  UMSELn	 UMSELn0	 MODE
 0	0	 Asynchronous Operation 
@@ -55,7 +56,7 @@ UCSZ (UCSZn) Bit Settings
 
 formula for UBRR value
 
-ubrr_value = (Clock_Speed[a.k.a. FOSC] / 16 / Baud_Rate) - 1
+*ubrr_value = (Clock_Speed[a.k.a. FOSC] / 16 / Baud_Rate) - 1*
 
 
    Now that we have our communication up and running we need to be able to monitor its status and any faults.  This is done by Register A (UCSRA or UCSRnA)  
