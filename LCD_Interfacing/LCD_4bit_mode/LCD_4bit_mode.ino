@@ -16,22 +16,22 @@ int main(void)
 {
     uint16_t data=0x0Daa;
 
-    LCDInit(LS_BLINK);
+    LCDInit();
     LCDClear();
      LCDGotoXY(0,1);
       LCDWriteString("The scrolling display ");
 
     while(1)
     {
-      LCDHome();
-       LCDWriteString("The number demo");
-      LCD_scroll(15);
-      LCDClear();
-      _delay_ms(200);
+      //LCDHome();
+       //LCDWriteString("The number demo");
+      //LCD_scroll(15);
+      //LCDClear();
+      //_delay_ms(200);
      LCDGotoXY(0,2);
      LCDWriteString("decimal form=");
-      LCD_dispDecimal(data,5);  //void LCD_dispDecimal(uint16_t num,uint8_t k)  k=nuumber of digit
-      LCD_scroll(15);
+      //LCD_dispDecimal(data,5);  //void LCD_dispDecimal(uint16_t num,uint8_t k)  k=nuumber of digit
+      //LCD_scroll(15);
      _delay_ms(500);
        LCDGotoXY(0,3);
       LCDWriteString("hexadeci form=");

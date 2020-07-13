@@ -4,11 +4,22 @@
 #include<avr/io.h>
 #include<util/delay.h>
 #include "mystdutil.h"
+/***************************************************************************************************
+                        List of commonly used LCD Commands 
+****************************************************************************************************/
+#define CMD_LCD_CLEAR                0x01u
+#define CMD_LCD_RETURN_HOME          0x02u
+#define CMD_DISPLAY_ON_CURSOR_OFF    0x0Cu
+#define CMD_DISPLAY_ON_CURSOR_ON     0x0Eu
+#define CMD_DISPLAY_ON_CURSOR_BLINK  0x0Fu
+#define CMD_LCD_FOUR_BIT_MODE        0x28u
+#define CMD_LCD_EIGHT_BIT_MODE       0x38u
+/**************************************************************************************************/
 /***************************************************************************/
 #define LCD_DATA_PORT 	PORTB
-#define LCD_E_PORT 		PORTB
-#define LCD_RS_PORT 	PORTB
-#define LCD_RW_PORT 	PORTB
+#define LCD_E_PORT 		  PORTB
+#define LCD_RS_PORT 	   PORTB
+#define LCD_RW_PORT 	  PORTB
 
 #define LCD_DATA_DDR 	DDRB
 #define LCD_E_DDR 		DDRB
@@ -18,10 +29,10 @@
 #define LCD_E_POS  	PB4
 #define LCD_RS_POS  PB7
 #define LCD_RW_POS  PB6
+#define LCD_DATA_PIN	PINB
 
 /******************************************************************************/
 
-#define LCD_DATA_PIN	PINB
 
 #define SET_E()   util_BitSet(LCD_E_PORT,LCD_E_POS)             //util_BitSet(x,bit) 
 #define SET_RS()  util_BitSet(LCD_RS_PORT,LCD_RS_POS)
@@ -37,14 +48,14 @@
 #define LCDCmd(c) (LCDByte(c,0))
 #define LCDData(d) (LCDByte(d,1))
 
-#define LCDClear() LCDCmd(0b00000001)
-#define LCDHome() LCDCmd(0b00000010);
+#define LCDClear() LCDCmd(CMD_LCD_CLEAR)
+#define LCDHome() LCDCmd(CMD_LCD_RETURN_HOME);
 /*********************************************************************************/
 uint8_t LcdlineNum[] = {0x80, 0xc0, 0x94, 0xD4};
 
 void LCDWriteString(const char *msg);
 void LCDBusyLoop();
-void LCDInit(uint8_t style);
+void LCDInit();
 void LCDByte(uint8_t c, uint8_t isdata);
 void LCDGotoXY(uint8_t x, uint8_t y);
 void LCD_dispDecimal(uint16_t num, uint8_t k);
@@ -109,7 +120,7 @@ void LCDBusyLoop()
 }
 
 
-void LCDInit(uint8_t style)
+void LCDInit()
 {
   //After power on Wait for LCD to Initialize
   _delay_ms(30);
@@ -128,8 +139,8 @@ void LCDInit(uint8_t style)
   //Set 4-bit mode
   _delay_us(0.3);	//tAS
 
-  SET_E();
-  LCD_DATA_PORT |= (0b00000010); //[B] To transfer 0b00100000 i was using LCD_DATA_PORT|=0b00100000
+   SET_E();
+  LCD_DATA_PORT |= (0b00000001); //[B] To transfer 0b00100000 i was using LCD_DATA_PORT|=0b00100000
   _delay_us(1);
   CLEAR_E();
   _delay_us(1);
@@ -139,9 +150,10 @@ void LCDInit(uint8_t style)
   _delay_ms(20);
   //Now the LCD is in 4-bit mode
 
-  	LCDCmd(0b00001100|style);	//Display On and cursor off
-  //LCDCmd(0b00001110 | style); //Display On and cursor  blinking
-  LCDCmd(0b00101000);			//function set 4-bit,2 line 5x7 dot format
+  	//LCDCmd(CMD_DISPLAY_ON_CURSOR_OFF);	//Display On and cursor off
+  //LCDCmd(CMD_DISPLAY_ON_CURSOR_ON); //Display On and cursor  on
+    LCDCmd(CMD_DISPLAY_ON_CURSOR_BLINK);  //Display On and cursor off
+  LCDCmd(CMD_LCD_FOUR_BIT_MODE);			//function set 4-bit,2 line 5x7 dot format
 }
 
 void LCDByte(uint8_t c, uint8_t isdata)
